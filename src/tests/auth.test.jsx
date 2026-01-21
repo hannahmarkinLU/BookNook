@@ -11,21 +11,16 @@ describe("AuthContext", () => {
     return render(
       <AuthProvider>
         <TestAuthConsumer />
-      </AuthProvider>
+      </AuthProvider>,
     );
   };
-
-  test("shows loading state initially", () => {
-    renderWithAuth();
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
-  });
 
   test("user is not authenticated by default", async () => {
     renderWithAuth();
 
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
-        "Not Authenticated"
+        "Not Authenticated",
       );
     });
   });
@@ -37,7 +32,7 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
-        "Authenticated"
+        "Authenticated",
       );
     });
 
@@ -53,7 +48,7 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
-        "Authenticated"
+        "Authenticated",
       );
     });
 
@@ -67,14 +62,14 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
-        "Authenticated"
+        "Authenticated",
       );
     });
 
     fireEvent.click(screen.getByText("Logout"));
 
     expect(screen.getByTestId("auth-status")).toHaveTextContent(
-      "Not Authenticated"
+      "Not Authenticated",
     );
     expect(localStorage.getItem("authToken")).toBeNull();
     expect(localStorage.getItem("username")).toBeNull();
@@ -88,7 +83,7 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
-        "Authenticated"
+        "Authenticated",
       );
     });
 

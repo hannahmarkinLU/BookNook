@@ -1,15 +1,16 @@
 // tests protected routes by verifying redirect behavior and authenticated access
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route, useLocation } from "react-router-dom";
-import ProtectedRoute from "../ProtectedRoute";
-import { AuthProvider } from "../../context/AuthContext";
+import ProtectedRoute from "../routes/ProtectedRoute";
+import { AuthProvider } from "../context/AuthContext";
+import { waitFor } from "@testing-library/react";
 
 // helper to render components with auth & router
 function renderWithProviders(ui, { route = "/" } = {}) {
   return render(
     <AuthProvider>
       <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
-    </AuthProvider>
+    </AuthProvider>,
   );
 }
 
@@ -31,7 +32,7 @@ describe("ProtectedRoute", () => {
   });
 
   test("redirects unauthenticated users to login", async () => {
-    renderWithProviders(
+    await renderWithProviders(
       <Routes>
         <Route
           path="/protected"
@@ -43,22 +44,17 @@ describe("ProtectedRoute", () => {
         />
         <Route path="/login" element={<LoginPage />} />
       </Routes>,
-      { route: "/protected" }
+      { route: "/protected" },
     );
 
     expect(await screen.findByText("Login Page")).toBeInTheDocument();
   });
 
   test("renders children when user is authenticated", async () => {
-    localStorage.setItem(
-      "authUser",
-      JSON.stringify({
-        username: "testuser",
-        token: "mock_token",
-      })
-    );
+    localStorage.setItem("authToken", "mock_token");
+    localStorage.setItem("username", "testuser");
 
-    renderWithProviders(
+    await renderWithProviders(
       <Routes>
         <Route
           path="/protected"
@@ -69,14 +65,14 @@ describe("ProtectedRoute", () => {
           }
         />
       </Routes>,
-      { route: "/protected" }
+      { route: "/protected" },
     );
 
     expect(await screen.findByText("Protected Content")).toBeInTheDocument();
   });
 
   test("passes original route in location state when redirecting", async () => {
-    renderWithProviders(
+    await renderWithProviders(
       <Routes>
         <Route
           path="/protected"
@@ -88,7 +84,7 @@ describe("ProtectedRoute", () => {
         />
         <Route path="/login" element={<LoginPage />} />
       </Routes>,
-      { route: "/protected" }
+      { route: "/protected" },
     );
 
     expect(await screen.findByTestId("from")).toHaveTextContent("/protected");

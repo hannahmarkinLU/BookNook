@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
   const login = async (username, password) => {
     setLoading(true);
 
-    // Simulate API delay
+    // simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     const mockToken = `mock_jwt_${Date.now()}`;
@@ -52,7 +52,7 @@ export function AuthProvider({ children }) {
   const register = async (username, password) => {
     setLoading(true);
 
-    // Simulate API delay
+    // simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 700));
 
     const mockToken = `mock_jwt_${Date.now()}`;
