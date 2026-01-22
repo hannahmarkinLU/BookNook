@@ -4,7 +4,7 @@ import { useAuth } from "./AuthContext";
 const BooksContext = createContext();
 
 export function BooksProvider({ children }) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   const [searchResults, setSearchResults] = useState([]);
   const [userSavedBooks, setUserSavedBooks] = useState([]);
@@ -13,6 +13,8 @@ export function BooksProvider({ children }) {
 
   // load saved books when user changes
   useEffect(() => {
+    if (authLoading) return;
+
     if (!user) {
       setUserSavedBooks([]);
       return;
@@ -21,9 +23,8 @@ export function BooksProvider({ children }) {
     const allSavedBooks =
       JSON.parse(localStorage.getItem("savedBooksByUser")) || {};
 
-    const booksForUser = allSavedBooks[user.username] || [];
-    setUserSavedBooks(booksForUser);
-  }, [user]);
+    setUserSavedBooks(allSavedBooks[user.username] || []);
+  }, [user, authLoading]);
 
   // persist books for the current user
   const persistUserBooks = (updatedBooks) => {
@@ -69,12 +70,20 @@ export function BooksProvider({ children }) {
   const saveBook = (book) => {
     if (!user) return;
 
+    const normalized = {
+      id: book.id,
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors || [],
+      description: book.volumeInfo.description || "",
+      thumbnail: book.volumeInfo.imageLinks?.thumbnail || "",
+    };
+
     setUserSavedBooks((prev) => {
-      if (prev.some((b) => b.id === book.id)) {
+      if (prev.some((b) => b.id === normalized.id)) {
         return prev;
       }
 
-      const updated = [...prev, book];
+      const updated = [...prev, normalized];
       persistUserBooks(updated);
       return updated;
     });

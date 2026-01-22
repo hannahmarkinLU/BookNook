@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -12,9 +12,9 @@ function Login() {
   const { login } = useAuth();
 
   // where the user tried to go before login
-  const from = location.state?.from || "/";
+  const from = location.state?.from || "/dashboard";
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -24,10 +24,9 @@ function Login() {
     }
 
     try {
-      login(username, password, selectedRole);
-      // redirect back to previous page
+      await login(username, password);
       navigate(from, { replace: true });
-    } catch (err) {
+    } catch {
       setError("Login failed. Please try again.");
     }
   };

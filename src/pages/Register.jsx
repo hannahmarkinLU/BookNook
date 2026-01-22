@@ -1,0 +1,88 @@
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+
+function Register() {
+  const { register, loading } = useAuth();
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      await register(username, password);
+      navigate("/dashboard");
+    } catch {
+      setError("Failed to create account");
+    }
+  };
+
+  return (
+    <div className="auth-page">
+      <header className="auth-header">
+        <div className="logo">📖</div>
+        <h1>BookNook</h1>
+        <p>Track your reading journey</p>
+      </header>
+
+      <form className="auth-card" onSubmit={handleSubmit}>
+        <h2>Sign up</h2>
+
+        {error && <p className="auth-error">{error}</p>}
+
+        <label>
+          Username
+          <input
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </label>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating account..." : "Sign up"}
+        </button>
+
+        <p className="auth-switch">Already have an account?</p>
+
+        <Link to="/login" className="secondary-button">
+          Login
+        </Link>
+      </form>
+    </div>
+  );
+}
+
+export default Register;

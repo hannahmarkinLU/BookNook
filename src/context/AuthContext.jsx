@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = Boolean(user);
 
-  // Restore session on refresh
+  // restore session on refresh
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const username = localStorage.getItem("username");
@@ -85,9 +85,5 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
