@@ -1,30 +1,30 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import "../styles/pages.css";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
-  // where the user tried to go before login
   const from = location.state?.from || "/dashboard";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!username.trim() || !password.trim()) {
-      setError("Please enter both username and password");
+    if (!loginValue.trim() || !password.trim()) {
+      setError("Please enter both email/username and password");
       return;
     }
 
     try {
-      await login(username, password);
+      await login(loginValue, password);
       navigate(from, { replace: true });
     } catch {
       setError("Login failed. Please try again.");
@@ -32,40 +32,48 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="auth-page">
+      <header className="auth-header">
+        <div className="logo">📖</div>
+        <h1>BookNook</h1>
+        <p>Track your reading journey</p>
+      </header>
+
+      <form className="auth-card" onSubmit={handleSubmit}>
         <h2>Login</h2>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <p className="auth-error">{error}</p>}
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
-            />
-          </div>
+        <label>
+          Email or Username
+          <input
+            type="text"
+            value={loginValue}
+            onChange={(e) => setLoginValue(e.target.value)}
+            required
+          />
+        </label>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-            />
-          </div>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
 
-          <button type="submit" className="btn btn-primary login-button">
-            Login
-          </button>
-        </form>
-      </div>
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+
+        <p className="auth-switch">New to BookNook?</p>
+
+        <Link to="/register" className="secondary-button">
+          Sign up
+        </Link>
+      </form>
     </div>
   );
 }

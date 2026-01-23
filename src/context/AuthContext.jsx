@@ -1,4 +1,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import {
+  getCurrentUser,
+  setCurrentUser,
+  clearCurrentUser,
+  getUsers,
+  createUser,
+  findUserByLogin,
+} from "../utils/storage";
 
 const AuthContext = createContext(null);
 
@@ -18,62 +26,64 @@ export function AuthProvider({ children }) {
 
   // restore session on refresh
   useEffect(() => {
-    const token = localStorage.getItem("authToken");
-    const username = localStorage.getItem("username");
-
-    if (token && username) {
-      setUser({ username, token });
+    const storedUser = getCurrentUser();
+    if (storedUser) {
+      setUser(storedUser);
     }
-
     setLoading(false);
   }, []);
 
-  const login = async (username, password) => {
+  // login (username or email)
+  const login = async (loginValue, password) => {
     setLoading(true);
 
-    // simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((r) => setTimeout(r, 500));
 
-    const mockToken = `mock_jwt_${Date.now()}`;
+    const foundUser = findUserByLogin(loginValue);
 
-    const userData = {
-      username,
-      token: mockToken,
-    };
+    if (!foundUser || foundUser.password !== password) {
+      setLoading(false);
+      throw new Error("Invalid credentials");
+    }
 
-    setUser(userData);
-    localStorage.setItem("authToken", mockToken);
-    localStorage.setItem("username", username);
-
+    setUser(foundUser);
+    setCurrentUser(foundUser);
     setLoading(false);
-    return userData;
+
+    return foundUser;
   };
 
-  const register = async (username, password) => {
+  // register (username & email required)
+  const register = async (username, email, password) => {
     setLoading(true);
 
-    // simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    await new Promise((r) => setTimeout(r, 700));
 
-    const mockToken = `mock_jwt_${Date.now()}`;
+    const users = getUsers();
 
-    const userData = {
-      username,
-      token: mockToken,
-    };
+    const usernameTaken = Object.values(users).some(
+      (u) => u.username === username,
+    );
+    const emailTaken = Object.values(users).some((u) => u.email === email);
 
-    setUser(userData);
-    localStorage.setItem("authToken", mockToken);
-    localStorage.setItem("username", username);
+    if (usernameTaken || emailTaken) {
+      setLoading(false);
+      throw new Error("Username or email already in use");
+    }
 
+    const newUser = createUser({ username, email, password });
+
+    setUser(newUser);
+    setCurrentUser(newUser);
     setLoading(false);
-    return userData;
+
+    return newUser;
   };
 
+  // logout
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("username");
+    clearCurrentUser();
   };
 
   const value = {
@@ -85,5 +95,9 @@ export function AuthProvider({ children }) {
     logout,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
 }

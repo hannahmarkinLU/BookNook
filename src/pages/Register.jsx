@@ -8,6 +8,7 @@ function Register() {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -16,16 +17,21 @@ function Register() {
     e.preventDefault();
     setError("");
 
+    if (!username || !email || !password) {
+      setError("All fields are required");
+      return;
+    }
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
-      await register(username, password);
+      await register(username, email, password);
       navigate("/dashboard");
-    } catch {
-      setError("Failed to create account");
+    } catch (err) {
+      setError(err.message || "Failed to create account");
     }
   };
 
@@ -48,6 +54,16 @@ function Register() {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </label>
+
+        <label>
+          Email
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </label>
