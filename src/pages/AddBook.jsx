@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useBooks } from "../context/BooksContext";
 
 export default function AddBook() {
-  const { searchBooks, searchResults, saveBook, loading, error } = useBooks();
+  const { searchBooks, searchResults, saveBook, isBookSaved, loading, error } =
+    useBooks();
+
   const [query, setQuery] = useState("");
 
   return (
@@ -21,12 +23,19 @@ export default function AddBook() {
       {error && <p>{error}</p>}
 
       <ul>
-        {searchResults.map((book) => (
-          <li key={book.id}>
-            <strong>{book.volumeInfo.title}</strong>
-            <button onClick={() => saveBook(book)}>Save</button>
-          </li>
-        ))}
+        {searchResults.map((book) => {
+          const saved = isBookSaved(book.id);
+
+          return (
+            <li key={book.id}>
+              <strong>{book.volumeInfo.title}</strong>
+
+              <button onClick={() => saveBook(book)} disabled={saved}>
+                {saved ? "Saved" : "Save"}
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

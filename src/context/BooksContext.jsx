@@ -68,7 +68,10 @@ export function BooksProvider({ children }) {
 
   // --- SAVED BOOKS ---
   const saveBook = (book) => {
-    if (!user) return;
+    if (!user) {
+      setError("You must be logged in to save books");
+      return;
+    }
 
     const normalized = {
       id: book.id,

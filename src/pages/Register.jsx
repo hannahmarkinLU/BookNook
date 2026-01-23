@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import "../styles/pages.css";
 
 function Register() {
   const { register, loading } = useAuth();
@@ -44,7 +45,7 @@ function Register() {
         <label>
           Username
           <input
-            type="username"
+            type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
