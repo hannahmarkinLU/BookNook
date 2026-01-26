@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import AddBook from "../pages/AddBook";
+import Profile from "../pages/Profile";
 import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
@@ -31,10 +32,18 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/search"
+        path="/add"
         element={
           <ProtectedRoute>
             <AddBook />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />

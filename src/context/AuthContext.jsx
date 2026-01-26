@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
 
   const isAuthenticated = Boolean(user);
 
-  // restore session on refresh
+  // restore session
   useEffect(() => {
     const storedUser = getCurrentUser();
     if (storedUser) {
@@ -33,10 +33,9 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  // login (username or email)
+  // login with email OR username
   const login = async (loginValue, password) => {
     setLoading(true);
-
     await new Promise((r) => setTimeout(r, 500));
 
     const foundUser = findUserByLogin(loginValue);
@@ -53,10 +52,9 @@ export function AuthProvider({ children }) {
     return foundUser;
   };
 
-  // register (username & email required)
+  // register with username + email
   const register = async (username, email, password) => {
     setLoading(true);
-
     await new Promise((r) => setTimeout(r, 700));
 
     const users = getUsers();
@@ -66,9 +64,14 @@ export function AuthProvider({ children }) {
     );
     const emailTaken = Object.values(users).some((u) => u.email === email);
 
-    if (usernameTaken || emailTaken) {
+    if (usernameTaken) {
       setLoading(false);
-      throw new Error("Username or email already in use");
+      throw new Error("Username already taken");
+    }
+
+    if (emailTaken) {
+      setLoading(false);
+      throw new Error("Email already in use");
     }
 
     const newUser = createUser({ username, email, password });
@@ -80,23 +83,22 @@ export function AuthProvider({ children }) {
     return newUser;
   };
 
-  // logout
   const logout = () => {
     setUser(null);
     clearCurrentUser();
   };
 
-  const value = {
-    user,
-    isAuthenticated,
-    loading,
-    login,
-    register,
-    logout,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        loading,
+        login,
+        register,
+        logout,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );
