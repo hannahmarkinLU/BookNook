@@ -1,0 +1,22 @@
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.wishlist {
+  background: #eee;
+  color: #555;
+}
+
+.status-badge.reading {
+  background: #e6f0ff;
+  color: #1d4ed8;
+}
+
+.status-badge.completed {
+  background: #e7f8ef;
+  color: #15803d;
+}

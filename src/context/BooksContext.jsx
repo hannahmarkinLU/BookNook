@@ -75,10 +75,11 @@ export function BooksProvider({ children }) {
 
     const normalized = {
       id: book.id,
-      title: book.volumeInfo.title,
-      authors: book.volumeInfo.authors || [],
-      description: book.volumeInfo.description || "",
-      thumbnail: book.volumeInfo.imageLinks?.thumbnail || "",
+      title: book.title,
+      authors: book.authors || [],
+      description: book.description || "",
+      thumbnail: book.thumbnail || "",
+      status: book.status || "wishlist",
     };
 
     setUserSavedBooks((prev) => {
@@ -115,6 +116,17 @@ export function BooksProvider({ children }) {
     return JSON.parse(localStorage.getItem("savedBooksByUser")) || {};
   };
 
+  const updateBookStatus = (bookId, status) => {
+    setUserSavedBooks((prev) => {
+      const updated = prev.map((book) =>
+        book.id === bookId ? { ...book, status } : book,
+      );
+
+      persistUserBooks(updated);
+      return updated;
+    });
+  };
+
   return (
     <BooksContext.Provider
       value={{
@@ -130,6 +142,7 @@ export function BooksProvider({ children }) {
         isBookSaved,
         getUserSavedBooks,
         getAllUserBooks,
+        updateBookStatus,
       }}
     >
       {children}

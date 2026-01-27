@@ -1,3 +1,5 @@
+/* === LOGIN/REGISTER === */
+
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -85,6 +87,8 @@
   color: #c0392b;
   text-align: center;
 }
+
+/* === DASHBOARD === */
 
 .dashboard-page {
   padding: 2rem 3rem;
@@ -194,4 +198,122 @@
   border: none;
   color: #c0392b;
   cursor: pointer;
+}
+
+/* === ADD BOOK === */
+
+.add-book-page {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.page-title {
+  margin-bottom: 1.5rem;
+}
+
+/* search bar */
+.search-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.search-result-card {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* book cover */
+.result-cover img {
+  width: 100px;
+  height: auto;
+  border-radius: 6px;
+}
+
+.cover-placeholder {
+  width: 100px;
+  height: 140px;
+  background: #eee;
+  border-radius: 6px;
+}
+
+/* book info */
+.result-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.result-info .author {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* button area */
+.result-action {
+  display: flex;
+  align-items: center;
+}
+
+.status-text {
+  margin-bottom: 1rem;
+}
+
+.error-text {
+  color: crimson;
+  margin-bottom: 1rem;
+}
+
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* action column */
+.result-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.result-action select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: #333;
+  font-weight: 600;
+  cursor: pointer;
+  padding-left: 0.25rem;
 }

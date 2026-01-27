@@ -1,8 +1,9 @@
 import BookStatusBadge from "./BookStatusBadge";
 import { useBooks } from "../../context/BooksContext";
+import "./BookCard.css";
 
 function BookCard({ book }) {
-  const { removeBook } = useBooks();
+  const { removeBook, updateBookStatus } = useBooks();
 
   return (
     <div className="book-card">

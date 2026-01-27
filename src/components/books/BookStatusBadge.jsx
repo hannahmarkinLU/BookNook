@@ -1,7 +1,15 @@
+import "./BookStatusBadge.css";
+
 function BookStatusBadge({ status }) {
+  const labelMap = {
+    wishlist: "Wishlist",
+    reading: "Reading",
+    completed: "Completed",
+  };
+
   return (
-    <span className={`status-badge ${status || "To Be Read"}`}>
-      {status || "To Be Read"}
+    <span className={`status-badge ${status}`}>
+      {labelMap[status] || "Wishlist"}
     </span>
   );
 }
