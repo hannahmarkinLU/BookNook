@@ -46,10 +46,12 @@ export function BooksProvider({ children }) {
     setError(null);
 
     try {
+      const API_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
+
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
           query,
-        )}`,
+        )}&maxResults=20&key=${API_KEY}`,
       );
 
       if (!response.ok) {
@@ -73,12 +75,21 @@ export function BooksProvider({ children }) {
       return;
     }
 
+    // get the best available image
+    const imageLinks = book.imageLinks || {};
+    const bestImage =
+      imageLinks.extraLarge ||
+      imageLinks.large ||
+      imageLinks.medium ||
+      imageLinks.thumbnail ||
+      "";
+
     const normalized = {
       id: book.id,
       title: book.title,
       authors: book.authors || [],
       description: book.description || "",
-      thumbnail: book.thumbnail || "",
+      thumbnail: bestImage, // use best image available
       status: book.status || "wishlist",
     };
 

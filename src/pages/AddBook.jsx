@@ -101,7 +101,6 @@ export default function AddBook() {
                     }
                     disabled={saved}
                   >
-                    <BookStatusBadge status={status} />
                     <option value="wishlist">Wishlist</option>
                     <option value="reading">Reading</option>
                     <option value="completed">Completed</option>
@@ -115,7 +114,7 @@ export default function AddBook() {
                         id: book.id,
                         title: info.title,
                         authors: info.authors,
-                        thumbnail: info.imageLinks?.thumbnail,
+                        imageLinks: info.imageLinks, // pass all image links
                         description: info.description,
                         status,
                       })

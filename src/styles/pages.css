@@ -317,3 +317,63 @@
   cursor: pointer;
   padding-left: 0.25rem;
 }
+
+.dashboard-filters {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+#status-filter,
+#search,
+.clear-filters-btn {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+#status-filter,
+#search {
+  border: 1px solid #e2e2e2;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+#status-filter {
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+.clear-filters-btn {
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  color: #666;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+/* Hover states */
+#status-filter:hover,
+#search:hover {
+  background-color: white;
+  border-color: #007bff;
+}
+
+.clear-filters-btn:hover {
+  background: #e0e0e0;
+  color: #333;
+}

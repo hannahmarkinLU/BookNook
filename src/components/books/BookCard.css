@@ -1,3 +1,22 @@
+.book-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Make card take full height */
+  min-height: 350px; /* Optional: Set minimum height */
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
 .book-cover {
   width: 100%;
   aspect-ratio: 2 / 3;
@@ -8,6 +27,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1rem;
 }
 
 .book-cover img {
@@ -23,24 +43,57 @@
   border-radius: 8px;
 }
 
-.remove-btn {
-  margin-top: 0.75rem;
-  padding: 0.4rem 0.75rem;
+.book-info {
+  flex: 1; /* Take remaining space */
+  display: flex;
+  flex-direction: column;
+}
+
+.book-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem 0;
+  line-height: 1.3;
+  color: #333;
+}
+
+.book-info .author {
   font-size: 0.85rem;
-  border: 1px solid #e2e2e2;
-  background-color: #fff;
-  color: #b00020;
+  color: #666;
+  margin: 0 0 1rem 0;
+}
+
+.spacer {
+  flex: 1; /* This pushes the footer to the bottom */
+}
+
+.book-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Ensures it stays at bottom */
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  padding: 0.4rem;
   border-radius: 6px;
   cursor: pointer;
+  color: #999;
   transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .remove-btn:hover {
-  background-color: #b00020;
-  color: #fff;
-  border-color: #b00020;
+  background-color: #fee;
+  color: #b00020;
 }
 
 .remove-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.95);
 }
