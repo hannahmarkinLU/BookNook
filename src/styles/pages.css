@@ -295,7 +295,6 @@
   line-height: 1.4;
 }
 
-/* action column */
 .result-action {
   display: flex;
   flex-direction: column;
@@ -317,6 +316,8 @@
   cursor: pointer;
   padding-left: 0.25rem;
 }
+
+/* === DASHBOARD === */
 
 .dashboard-filters {
   display: flex;
@@ -341,6 +342,7 @@
   transition: all 0.2s ease;
   height: 42px;
   box-sizing: border-box;
+  border-radius: 8px;
 }
 
 #status-filter,
@@ -366,7 +368,6 @@
   min-width: 120px;
 }
 
-/* Hover states */
 #status-filter:hover,
 #search:hover {
   background-color: white;
@@ -376,4 +377,241 @@
 .clear-filters-btn:hover {
   background: #e0e0e0;
   color: #333;
+}
+
+/* === BOOK DETAILS === */
+
+.book-details-page {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.2s ease;
+}
+
+.back-button:hover {
+  color: #007bff;
+}
+
+.book-details-header {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  align-items: flex-start;
+}
+
+.book-details-cover {
+  flex-shrink: 0;
+  width: 200px;
+}
+
+.book-details-cover img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.book-details-basic {
+  flex: 1;
+}
+
+.book-details-title {
+  font-size: 2.5rem;
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  line-height: 1.2;
+}
+
+.book-details-author {
+  font-size: 1.2rem;
+  color: #666;
+  margin: 0;
+}
+
+.book-details-form {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #333;
+}
+
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: white;
+  transition: border-color 0.2s ease;
+}
+
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #ddd;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  line-height: 1;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.save-changes-button {
+  width: 100%;
+  padding: 1rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.save-changes-button:hover {
+  background: #444;
+}
+
+.save-changes-button:active {
+  transform: translateY(1px);
+}
+
+.rating-stars {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.rating-value {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 1rem;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #ddd;
+  cursor: pointer;
+  padding: 0;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+  line-height: 1;
+}
+
+.star:hover {
+  transform: scale(1.1);
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.book-description {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.book-description h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.book-description p {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.description-text {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+  position: relative;
+}
+
+.save-changes-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.save-changes-button:disabled:hover {
+  background: #333;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 0.5rem;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+}
+
+.link-button:hover {
+  color: #666;
 }

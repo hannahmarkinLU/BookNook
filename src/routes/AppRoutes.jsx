@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import AddBook from "../pages/AddBook";
+import BookDetails from "../pages/BookDetails";
 import Profile from "../pages/Profile";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -36,6 +37,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <AddBook />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/book/:id"
+        element={
+          <ProtectedRoute>
+            <BookDetails />
           </ProtectedRoute>
         }
       />

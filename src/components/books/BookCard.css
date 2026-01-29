@@ -8,8 +8,9 @@
     box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
-  height: 100%; /* Make card take full height */
-  min-height: 350px; /* Optional: Set minimum height */
+  height: 100%;
+  min-height: 350px;
+  cursor: pointer;
 }
 
 .book-card:hover {

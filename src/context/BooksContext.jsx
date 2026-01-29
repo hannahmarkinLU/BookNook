@@ -69,6 +69,7 @@ export function BooksProvider({ children }) {
   };
 
   // --- SAVED BOOKS ---
+
   const saveBook = (book) => {
     if (!user) {
       setError("You must be logged in to save books");
@@ -91,6 +92,8 @@ export function BooksProvider({ children }) {
       description: book.description || "",
       thumbnail: bestImage, // use best image available
       status: book.status || "wishlist",
+      rating: book.rating || 0,
+      review: book.review || "",
     };
 
     setUserSavedBooks((prev) => {
@@ -99,6 +102,19 @@ export function BooksProvider({ children }) {
       }
 
       const updated = [...prev, normalized];
+      persistUserBooks(updated);
+      return updated;
+    });
+  };
+
+  const updateBookDetails = (bookId, updates) => {
+    if (!user) return;
+
+    setUserSavedBooks((prev) => {
+      const updated = prev.map((book) =>
+        book.id === bookId ? { ...book, ...updates } : book,
+      );
+
       persistUserBooks(updated);
       return updated;
     });
@@ -128,9 +144,24 @@ export function BooksProvider({ children }) {
   };
 
   const updateBookStatus = (bookId, status) => {
+    if (!user) return;
+
     setUserSavedBooks((prev) => {
       const updated = prev.map((book) =>
         book.id === bookId ? { ...book, status } : book,
+      );
+
+      persistUserBooks(updated);
+      return updated;
+    });
+  };
+
+  const updateBook = (bookId, updates) => {
+    if (!user) return;
+
+    setUserSavedBooks((prev) => {
+      const updated = prev.map((book) =>
+        book.id === bookId ? { ...book, ...updates } : book,
       );
 
       persistUserBooks(updated);
@@ -154,6 +185,8 @@ export function BooksProvider({ children }) {
         getUserSavedBooks,
         getAllUserBooks,
         updateBookStatus,
+        updateBook,
+        updateBookDetails,
       }}
     >
       {children}

@@ -9,7 +9,7 @@ function Dashboard() {
   const { user, loading: authLoading } = useAuth();
   const { getUserSavedBooks } = useBooks();
 
-  // State for filters
+  // state for filters
   const [statusFilter, setStatusFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -19,21 +19,21 @@ function Dashboard() {
 
   const books = getUserSavedBooks() || [];
 
-  // Calculate total stats from ALL books (unfiltered)
+  // calculate total stats from all books
   const totalBooks = books.length;
   const totalReading = books.filter((b) => b.status === "reading").length;
   const totalCompleted = books.filter((b) => b.status === "completed").length;
   const totalWishlist = books.filter((b) => b.status === "wishlist").length;
 
-  // Filter logic
+  // filter logic
   const filteredBooks = useMemo(() => {
     return books.filter((book) => {
-      // Apply status filter
+      // apply status filter
       if (statusFilter && book.status !== statusFilter) {
         return false;
       }
 
-      // Apply search filter
+      // apply search filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         return (
@@ -47,7 +47,7 @@ function Dashboard() {
     });
   }, [books, statusFilter, searchQuery]);
 
-  // Calculate filtered stats
+  // calculate filtered stats
   const filteredTotal = filteredBooks.length;
   const filteredReading = filteredBooks.filter(
     (b) => b.status === "reading",
@@ -66,7 +66,7 @@ function Dashboard() {
       <main className="dashboard-page">
         <h1 className="dashboard-title">{user.username}'s Reading Dashboard</h1>
 
-        {/* Stats - ALWAYS show totals from ALL books */}
+        {/* show totals from all books */}
         <section className="dashboard-stats">
           <div className="stat-card">
             <span>Total Books</span>
@@ -84,7 +84,7 @@ function Dashboard() {
           </div>
         </section>
 
-        {/* Filters */}
+        {/* filters */}
         <section className="dashboard-filters">
           <div className="filter-group">
             <label htmlFor="status-filter">Filter by Status</label>
@@ -111,7 +111,7 @@ function Dashboard() {
             />
           </div>
 
-          {/* Clear Filters Button */}
+          {/* clear filters button */}
           {(statusFilter || searchQuery) && (
             <div className="filter-group">
               <button
@@ -127,7 +127,7 @@ function Dashboard() {
           )}
         </section>
 
-        {/* Books - Pass filtered books to BookGrid */}
+        {/* pass filtered books to bookgrid */}
         <BookGrid books={filteredBooks} />
       </main>
     </>

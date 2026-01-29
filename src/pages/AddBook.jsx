@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useBooks } from "../context/BooksContext";
-import BookStatusBadge from "../components/books/BookStatusBadge";
 import Navbar from "../components/navigation/NavBar";
 import "../styles/pages.css";
 
