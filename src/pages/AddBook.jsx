@@ -63,7 +63,6 @@ export default function AddBook() {
                     <div className="cover-placeholder" />
                   )}
                 </div>
-
                 {/* Info */}
                 <div className="result-info">
                   <h3>{info.title}</h3>
@@ -90,7 +89,6 @@ export default function AddBook() {
                     </p>
                   )}
                 </div>
-
                 {/* Actions */}
                 <div className="result-action">
                   <select
@@ -113,7 +111,7 @@ export default function AddBook() {
                         id: book.id,
                         title: info.title,
                         authors: info.authors,
-                        imageLinks: info.imageLinks, // pass all image links
+                        imageLinks: info.imageLinks,
                         description: info.description,
                         status,
                       })
