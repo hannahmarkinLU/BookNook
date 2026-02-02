@@ -88,6 +88,33 @@ export function AuthProvider({ children }) {
     clearCurrentUser();
   };
 
+  // delete account
+  const deleteAccount = async () => {
+    if (!user) return;
+
+    try {
+      // remove user's saved books data using the userId
+      const allSavedBooks =
+        JSON.parse(localStorage.getItem("savedBooksByUser")) || {};
+      delete allSavedBooks[user.id]; // Use user.id, not user.username
+      localStorage.setItem("savedBooksByUser", JSON.stringify(allSavedBooks));
+
+      // remove user from users
+      const users = JSON.parse(localStorage.getItem("users")) || {};
+      delete users[user.id]; // Delete by user.id
+      localStorage.setItem("users", JSON.stringify(users));
+
+      // logout the user
+      setUser(null);
+      localStorage.removeItem("currentUser");
+
+      return Promise.resolve();
+    } catch (error) {
+      console.error("Error in deleteAccount:", error);
+      throw error;
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -97,6 +124,7 @@ export function AuthProvider({ children }) {
         login,
         register,
         logout,
+        deleteAccount,
       }}
     >
       {!loading && children}

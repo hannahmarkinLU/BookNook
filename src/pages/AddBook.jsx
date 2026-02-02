@@ -31,7 +31,7 @@ export default function AddBook() {
       <main className="add-book-page">
         <h1 className="page-title">Add / Search Books</h1>
 
-        {/* Search */}
+        {/* search */}
         <form className="search-card" onSubmit={handleSearch}>
           <input
             className="search-input"
@@ -55,7 +55,7 @@ export default function AddBook() {
 
             return (
               <div className="search-result-card" key={book.id}>
-                {/* Cover */}
+                {/* cover */}
                 <div className="result-cover">
                   {info.imageLinks?.thumbnail ? (
                     <img src={info.imageLinks.thumbnail} alt={info.title} />
@@ -63,7 +63,7 @@ export default function AddBook() {
                     <div className="cover-placeholder" />
                   )}
                 </div>
-                {/* Info */}
+                {/* info */}
                 <div className="result-info">
                   <h3>{info.title}</h3>
                   <p className="author">
@@ -89,7 +89,7 @@ export default function AddBook() {
                     </p>
                   )}
                 </div>
-                {/* Actions */}
+                {/* actions */}
                 <div className="result-action">
                   <select
                     value={status}
