@@ -1,22 +1,101 @@
+@import url("./src/index.css");
+
 .status-badge {
-  display: inline-block;
-  padding: 0.25rem 0.6rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  min-width: 90px;
+  white-space: nowrap;
 }
 
+/* Wishlist Status */
 .status-badge.wishlist {
-  background: #eee;
-  color: #555;
+  background-color: var(--status-wishlist);
+  color: var(--text-primary);
+  border-color: rgba(227, 217, 201, 0.3);
 }
 
+/* Reading Status */
 .status-badge.reading {
-  background: #e6f0ff;
-  color: #1d4ed8;
+  background-color: var(--status-reading);
+  color: var(--text-primary);
+  border-color: rgba(201, 216, 211, 0.3);
 }
 
+/* Completed Status */
 .status-badge.completed {
-  background: #e7f8ef;
-  color: #15803d;
+  background-color: var(--status-completed);
+  color: var(--text-primary);
+  border-color: rgba(214, 228, 199, 0.3);
+}
+
+/* Status Badge with Icon */
+.status-badge.with-icon {
+  gap: 0.4rem;
+  padding-left: 0.6rem;
+}
+
+.status-badge .status-icon {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* Small Variant */
+.status-badge.small {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.7rem;
+  min-width: 70px;
+}
+
+/* Large Variant */
+.status-badge.large {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  min-width: 110px;
+}
+
+/* Outline Variant */
+.status-badge.outline.wishlist {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--status-wishlist);
+}
+
+.status-badge.outline.reading {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--status-reading);
+}
+
+.status-badge.outline.completed {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--status-completed);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .status-badge {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+    min-width: 80px;
+  }
+
+  .status-badge.small {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+    min-width: 65px;
+  }
+
+  .status-badge-group {
+    gap: 0.4rem;
+  }
 }

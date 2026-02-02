@@ -1,21 +1,30 @@
+@import url("./src/index.css");
+
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background: white;
-  border-bottom: 1px solid #eee;
+  background: var(--primary);
+  position: relative;
+  border-bottom: 1px solid var(--border-light);
 }
 
 .navbar-left {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  z-index: 1001;
+}
+
+.logo {
+  font-size: 1.2rem;
 }
 
 .brand {
   font-weight: 600;
   font-size: 1.2rem;
+  color: white;
 }
 
 .navbar-links {
@@ -26,14 +35,162 @@
 
 .navbar-links a {
   text-decoration: none;
-  color: #333;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: var(--text-primary);
+}
+
+.navbar-links a.active {
+  color: white;
+  font-weight: bold;
 }
 
 .logout-btn {
   padding: 0.4rem 0.9rem;
   border-radius: 8px;
   border: none;
-  background: #333;
+  background: var(--text-primary);
   color: white;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background: var(--primary-hover);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.hamburger span {
+  width: 100%;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* transitions made with ai assistance, modified by me */
+.hamburger.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+/* responsive styles */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 1rem;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 250px;
+    background: var(--bg-card);
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 80px 2rem 2rem;
+    gap: 1.5rem;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    box-shadow: -2px 0 10px var(--shadow-medium);
+  }
+
+  .navbar-links.active {
+    right: 0;
+  }
+
+  .navbar-links a {
+    width: 100%;
+    padding: 0.5rem 0;
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+  }
+
+  .navbar-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .navbar-links a.active {
+    color: var(--primary);
+  }
+
+  .logout-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.6rem;
+    background: var(--text-primary);
+    color: white;
+  }
+
+  .logout-btn:hover {
+    background: var(--primary-hover);
+  }
+
+  .overlay {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand {
+    font-size: 1rem;
+  }
+
+  .navbar-links {
+    width: 100%;
+    right: -100%;
+  }
+
+  .navbar-links.active {
+    right: 0;
+  }
+}
+
+/* tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar {
+    padding: 1rem 1.5rem;
+  }
+
+  .navbar-links {
+    gap: 1rem;
+  }
 }

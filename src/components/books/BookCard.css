@@ -1,5 +1,7 @@
+@import url("./src/index.css");
+
 .book-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -15,7 +17,7 @@
 
 .book-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 20px var(--shadow-medium);
 }
 
 .book-cover {
@@ -23,11 +25,11 @@
   aspect-ratio: 2 / 3;
   overflow: hidden;
   border-radius: 8px;
-  background-color: #f2f2f2;
+  background-color: var(--bg-muted);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 10px var(--shadow-soft);
   margin-bottom: 1rem;
 }
 
@@ -40,12 +42,16 @@
 .cover-placeholder {
   width: 100%;
   height: 100%;
-  background: #e0e0e0;
+  background: linear-gradient(
+    135deg,
+    var(--primary-light) 0%,
+    var(--secondary-light) 100%
+  );
   border-radius: 8px;
 }
 
 .book-info {
-  flex: 1; /* Take remaining space */
+  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -55,35 +61,35 @@
   font-weight: 600;
   margin: 0 0 0.4rem 0;
   line-height: 1.3;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .book-info .author {
   font-size: 0.85rem;
-  color: #666;
+  color: var(--text-secondary);
   margin: 0 0 1rem 0;
 }
 
 .spacer {
-  flex: 1; /* This pushes the footer to the bottom */
+  flex: 1; /* pushes the footer to the bottom */
 }
 
 .book-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto; /* Ensures it stays at bottom */
+  margin-top: auto;
   padding-top: 0.75rem;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-light);
 }
 
 .remove-btn {
-  background: none;
-  border: none;
+  background: var(--bg-muted);
+  border: 1px solid var(--border-light);
   padding: 0.4rem;
   border-radius: 6px;
   cursor: pointer;
-  color: #999;
+  color: var(--text-secondary);
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
@@ -91,10 +97,70 @@
 }
 
 .remove-btn:hover {
-  background-color: #fee;
-  color: #b00020;
+  background-color: #ffbebe;
+  color: var(--danger);
+  border-color: var(--danger);
 }
 
 .remove-btn:active {
   transform: scale(0.95);
+}
+
+/* media responsiveness  */
+@media (max-width: 768px) {
+  .book-card {
+    min-height: 350px;
+    padding: 1rem;
+    border-radius: 14px;
+  }
+
+  .book-cover {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .book-info h3 {
+    font-size: 1rem;
+  }
+
+  .book-info .author {
+    font-size: 0.85rem;
+  }
+
+  .book-actions {
+    opacity: 1;
+    transform: translateY(0);
+    position: static;
+    margin-top: 0.75rem;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-card {
+    min-height: 320px;
+  }
+
+  .book-footer {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .book-footer .status-badge {
+    margin-right: 0;
+    order: 1;
+  }
+
+  .remove-btn {
+    order: 2;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
