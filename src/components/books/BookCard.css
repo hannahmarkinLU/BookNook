@@ -106,7 +106,7 @@
   transform: scale(0.95);
 }
 
-/* media responsiveness  */
+/* responsive styles  */
 @media (max-width: 768px) {
   .book-card {
     min-height: 350px;

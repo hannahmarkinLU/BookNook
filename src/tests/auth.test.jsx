@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { AuthProvider } from "../context/AuthContext";
+import { BooksProvider } from "../context/BooksContext";
 import TestAuthConsumer from "./utils/TestAuthConsumer";
 
 describe("AuthContext", () => {
@@ -10,7 +11,9 @@ describe("AuthContext", () => {
   const renderWithAuth = () => {
     return render(
       <AuthProvider>
-        <TestAuthConsumer />
+        <BooksProvider>
+          <TestAuthConsumer />
+        </BooksProvider>
       </AuthProvider>,
     );
   };
@@ -30,15 +33,23 @@ describe("AuthContext", () => {
 
     fireEvent.click(screen.getByText("Login"));
 
+    // wait for login to complete
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
         "Authenticated",
       );
     });
 
+    // check for username
     expect(screen.getByTestId("username")).toHaveTextContent("testuser");
-    expect(localStorage.getItem("authToken")).toBeTruthy();
-    expect(localStorage.getItem("username")).toBe("testuser");
+
+    // check localStorage, entire user object stored under 'currentUser'
+    await waitFor(() => {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      expect(currentUser).toBeTruthy();
+      expect(currentUser.username).toBe("testuser");
+      expect(currentUser.email).toBe("test@test.com");
+    });
   });
 
   test("register authenticates new user", async () => {
@@ -58,26 +69,42 @@ describe("AuthContext", () => {
   test("logout clears user and localStorage", async () => {
     renderWithAuth();
 
+    // first login
     fireEvent.click(screen.getByText("Login"));
-
     await waitFor(() => {
       expect(screen.getByTestId("auth-status")).toHaveTextContent(
         "Authenticated",
       );
     });
 
+    // then logout
     fireEvent.click(screen.getByText("Logout"));
 
-    expect(screen.getByTestId("auth-status")).toHaveTextContent(
-      "Not Authenticated",
-    );
-    expect(localStorage.getItem("authToken")).toBeNull();
-    expect(localStorage.getItem("username")).toBeNull();
+    await waitFor(() => {
+      expect(screen.getByTestId("auth-status")).toHaveTextContent(
+        "Not Authenticated",
+      );
+    });
+
+    // username should not be visible
+    expect(screen.queryByTestId("username")).not.toBeInTheDocument();
+
+    // check localStorage is cleared
+    expect(localStorage.getItem("currentUser")).toBeNull();
   });
 
   test("restores user from localStorage on refresh", async () => {
-    localStorage.setItem("authToken", "mock_token");
-    localStorage.setItem("username", "persistedUser");
+    // create a proper user object as it would be stored
+    const persistedUser = {
+      id: "test-id",
+      username: "persistedUser",
+      email: "persisted@test.com",
+      password: "password",
+      createdAt: new Date().toISOString(),
+    };
+
+    // set localStorage with correct key and format
+    localStorage.setItem("currentUser", JSON.stringify(persistedUser));
 
     renderWithAuth();
 

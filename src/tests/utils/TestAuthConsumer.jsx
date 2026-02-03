@@ -1,22 +1,44 @@
-// dummy component for testing useAuth
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
-export default function TestAuthConsumer() {
-  const { user, login, register, logout, loading, isAuthenticated } = useAuth();
+function TestAuthConsumer() {
+  const { user, login, register, logout, loading, error } = useAuth();
+  const [localError, setLocalError] = useState(null);
 
-  if (loading) return <div>Loading...</div>;
+  const handleLogin = async () => {
+    try {
+      setLocalError(null);
+      // for test user, use username as login value
+      await login("testuser", "password");
+    } catch (err) {
+      setLocalError(err.message);
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      setLocalError(null);
+      // use the register function with email
+      await register("newuser", "newuser@test.com", "password");
+    } catch (err) {
+      setLocalError(err.message);
+    }
+  };
 
   return (
     <div>
       <div data-testid="auth-status">
-        {isAuthenticated ? "Authenticated" : "Not Authenticated"}
+        {user ? "Authenticated" : "Not Authenticated"}
       </div>
-
       {user && <div data-testid="username">{user.username}</div>}
-
-      <button onClick={() => login("testuser", "password")}>Login</button>
-      <button onClick={() => register("newuser", "password")}>Register</button>
+      {loading && <div data-testid="loading">Loading...</div>}
+      {localError && <div data-testid="error">{localError}</div>}
+      {error && <div data-testid="auth-error">{error}</div>}
+      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleRegister}>Register</button>
       <button onClick={logout}>Logout</button>
     </div>
   );
 }
+
+export default TestAuthConsumer;
