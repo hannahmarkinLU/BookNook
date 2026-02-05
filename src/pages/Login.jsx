@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import {
+  validateEmail,
+  validateUsername,
+  sanitizeInput,
+} from "../utils/security";
 import "../styles/pages.css";
 
 function Login() {
@@ -18,13 +23,26 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    if (!loginValue.trim() || !password.trim()) {
+    // sanitize inputs
+    const sanitizedLogin = sanitizeInput(loginValue);
+    const sanitizedPassword = sanitizeInput(password);
+
+    if (!sanitizedLogin.trim() || !sanitizedPassword.trim()) {
       setError("Please enter both email/username and password");
       return;
     }
 
+    // basic validation
+    const isEmail = validateEmail(sanitizedLogin);
+    const isUsername = validateUsername(sanitizedLogin);
+
+    if (!isEmail && !isUsername) {
+      setError("Please enter a valid email or username");
+      return;
+    }
+
     try {
-      await login(loginValue, password);
+      await login(sanitizedLogin, sanitizedPassword);
       navigate(from, { replace: true });
     } catch {
       setError("Login failed. Please try again.");

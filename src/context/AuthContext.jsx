@@ -7,6 +7,12 @@ import {
   createUser,
   findUserByLogin,
 } from "../utils/storage";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+  sanitizeInput,
+} from "../utils/security";
 
 const AuthContext = createContext(null);
 
@@ -29,7 +35,13 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const storedUser = getCurrentUser();
     if (storedUser) {
-      setUser(storedUser);
+      // Sanitize stored user data on restore
+      const sanitizedUser = {
+        ...storedUser,
+        username: storedUser.username ? sanitizeInput(storedUser.username) : "",
+        email: storedUser.email ? sanitizeInput(storedUser.email) : "",
+      };
+      setUser(sanitizedUser);
     }
     setLoading(false);
   }, []);
@@ -68,6 +80,30 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  // validate login credentials
+  const validateCredentials = (loginValue, password) => {
+    const sanitizedLogin = sanitizeInput(loginValue);
+    const sanitizedPassword = sanitizeInput(password);
+
+    if (!sanitizedLogin.trim() || !sanitizedPassword.trim()) {
+      throw new Error("Both fields are required");
+    }
+
+    // check if login value is email or username
+    const isEmail = validateEmail(sanitizedLogin);
+    const isUsername = validateUsername(sanitizedLogin);
+
+    if (!isEmail && !isUsername) {
+      throw new Error("Please enter a valid email or username");
+    }
+
+    if (!validatePassword(sanitizedPassword)) {
+      throw new Error("Invalid password format");
+    }
+
+    return { sanitizedLogin, sanitizedPassword };
+  };
+
   // login with email OR username
   const login = async (loginValue, password) => {
     setLoading(true);
@@ -77,22 +113,74 @@ export function AuthProvider({ children }) {
     await new Promise((r) => setTimeout(r, 100));
 
     try {
-      const foundUser = findUserByLogin(loginValue);
+      // validate and sanitize inputs
+      const { sanitizedLogin, sanitizedPassword } = validateCredentials(
+        loginValue,
+        password,
+      );
 
-      if (!foundUser || foundUser.password !== password) {
-        setError("Invalid credentials");
-        throw new Error("Invalid credentials");
+      const foundUser = findUserByLogin(sanitizedLogin);
+
+      if (!foundUser) {
+        setError("User not found");
+        throw new Error("User not found");
       }
 
-      setUser(foundUser);
-      setCurrentUser(foundUser);
-      return foundUser;
+      // simple password comparison
+      if (foundUser.password !== sanitizedPassword) {
+        setError("Invalid password");
+        throw new Error("Invalid password");
+      }
+
+      // sanitize user data before storing
+      const sanitizedUser = {
+        ...foundUser,
+        username: sanitizeInput(foundUser.username),
+        email: sanitizeInput(foundUser.email),
+      };
+
+      setUser(sanitizedUser);
+      setCurrentUser(sanitizedUser);
+      return sanitizedUser;
     } catch (error) {
       setError(error.message);
       throw error;
     } finally {
       setLoading(false);
     }
+  };
+
+  // validate registration data
+  const validateRegistration = (username, email, password) => {
+    const sanitizedUsername = sanitizeInput(username);
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
+    if (
+      !sanitizedUsername.trim() ||
+      !sanitizedEmail.trim() ||
+      !sanitizedPassword.trim()
+    ) {
+      throw new Error("All fields are required");
+    }
+
+    if (!validateUsername(sanitizedUsername)) {
+      throw new Error(
+        "Username must be 3-20 characters (letters, numbers, _, -)",
+      );
+    }
+
+    if (!validateEmail(sanitizedEmail)) {
+      throw new Error("Please enter a valid email address");
+    }
+
+    if (!validatePassword(sanitizedPassword)) {
+      throw new Error(
+        "Password must be at least 8 characters with letters and numbers",
+      );
+    }
+
+    return { sanitizedUsername, sanitizedEmail, sanitizedPassword };
   };
 
   // register with username + email
@@ -108,13 +196,17 @@ export function AuthProvider({ children }) {
       const registerEmail = email || `${username}@test.com`;
       const registerPassword = password || "password";
 
+      // validate and sanitize inputs
+      const { sanitizedUsername, sanitizedEmail, sanitizedPassword } =
+        validateRegistration(username, registerEmail, registerPassword);
+
       const users = getUsers();
 
       const usernameTaken = Object.values(users).some(
-        (u) => u.username === username,
+        (u) => u.username === sanitizedUsername,
       );
       const emailTaken = Object.values(users).some(
-        (u) => u.email === registerEmail,
+        (u) => u.email === sanitizedEmail,
       );
 
       if (usernameTaken) {
@@ -128,14 +220,21 @@ export function AuthProvider({ children }) {
       }
 
       const newUser = createUser({
-        username,
-        email: registerEmail,
-        password: registerPassword,
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+        password: sanitizedPassword,
       });
 
-      setUser(newUser);
-      setCurrentUser(newUser);
-      return newUser;
+      // sanitize user data before storing in state
+      const sanitizedUser = {
+        ...newUser,
+        username: sanitizedUsername,
+        email: sanitizedEmail,
+      };
+
+      setUser(sanitizedUser);
+      setCurrentUser(sanitizedUser);
+      return sanitizedUser;
     } catch (error) {
       setError(error.message);
       throw error;
@@ -146,7 +245,12 @@ export function AuthProvider({ children }) {
 
   // simplified register for tests (username only)
   const registerWithUsername = async (username) => {
-    return register(username, `${username}@test.com`, "password");
+    const sanitizedUsername = sanitizeInput(username);
+    return register(
+      sanitizedUsername,
+      `${sanitizedUsername}@test.com`,
+      "password",
+    );
   };
 
   const logout = () => {
@@ -163,12 +267,12 @@ export function AuthProvider({ children }) {
       // remove user's saved books data using the userId
       const allSavedBooks =
         JSON.parse(localStorage.getItem("savedBooksByUser")) || {};
-      delete allSavedBooks[user.id]; // Use user.id, not user.username
+      delete allSavedBooks[user.id];
       localStorage.setItem("savedBooksByUser", JSON.stringify(allSavedBooks));
 
       // remove user from users
       const users = JSON.parse(localStorage.getItem("users")) || {};
-      delete users[user.id]; // Delete by user.id
+      delete users[user.id];
       localStorage.setItem("users", JSON.stringify(users));
 
       // logout the user

@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  validateEmail,
+  validateUsername,
+  sanitizeInput,
+} from "../utils/security";
 import "../styles/pages.css";
 
 function Register() {
@@ -17,18 +22,37 @@ function Register() {
     e.preventDefault();
     setError("");
 
-    if (!username || !email || !password) {
-      setError("All fields are required");
+    // sanitize all inputs
+    const sanitizedUsername = sanitizeInput(username);
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+    const sanitizedConfirmPassword = sanitizeInput(confirmPassword);
+
+    // validate
+    if (!validateUsername(sanitizedUsername)) {
+      setError("Username must be 3-20 characters (letters, numbers, _, -)");
       return;
     }
 
-    if (password !== confirmPassword) {
+    if (!validateEmail(sanitizedEmail)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    if (!validatePassword(sanitizedPassword)) {
+      setError(
+        "Password must be at least 8 characters with letters and numbers",
+      );
+      return;
+    }
+
+    if (sanitizedPassword !== sanitizedConfirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
-      await register(username, email, password);
+      await register(sanitizedUsername, sanitizedEmail, sanitizedPassword);
       navigate("/dashboard");
     } catch (err) {
       setError(err.message || "Failed to create account");

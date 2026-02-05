@@ -1,96 +1,102 @@
-# NewsReader Starter App
+# 📚 BookNook - Reading Tracker
 
-⚠️ **IMPORTANT: This is intentionally insecure starter code!**
+A modern web application for tracking your reading journey. Save books, track reading progress, write reviews, and manage your personal library.
 
-This application has several security issues that you will need to fix as part of your assignment:
+## ✨ Features
 
-## Security Issues to Address
+- **🔐 User Authentication** - Secure login and registration
+- **📖 Book Search** - Search books using Google Books API
+- **📊 Reading Dashboard** - Track reading statistics and progress
+- **🏷️ Book Organization** - Categorize books as Wishlist, Reading, or Completed
+- **⭐ Ratings & Reviews** - Rate books and write detailed reviews
+- **📱 Responsive Design** - Works on mobile, tablet, and desktop
+- **🔒 Security** - Input sanitization and validation
 
-1. **No Authentication**: Anyone can access all features without logging in
-2. **Shared State**: All users share the same saved articles (no user-specific data)
-3. **No Protected Routes**: The "Saved Articles" page should require authentication
-4. **No Role-Based Access**: There's no concept of different user types (regular vs premium)
+## 🚀 Live Demo
 
-## Getting Started
+[Deployed on Vercel](https://your-vercel-app-url.vercel.app) <!-- UPDATE -->
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React 18, Vite
+- **Routing**: React Router DOM
+- **State Management**: React Context API
+- **Styling**: CSS Modules / Custom CSS
+- **API**: Google Books API
+- **Testing**: Vitest, React Testing Library
+- **Deployment**: Vercel
+- **Security**: DOMPurify, Input Validation
+
+## 📦 Installation & Setup
 
 ### Prerequisites
-- Node.js (v18 or higher)
-- A NY Times API key (get one free at https://developer.nytimes.com/)
 
-### Getting Your NY Times API Key
+- Node.js 18+ and npm
 
-1. Visit https://developer.nytimes.com/ and create a free account
-2. After logging in, click on your email address in the top right corner
-3. Click "Apps" to go to your apps page
-4. Click "New App" button
-5. Give your app a name (e.g., "NewsReader App")
-6. **Important**: Enable these two APIs:
-   - ✅ **Top Stories API**
-   - ✅ **Article Search API**
-7. Click "Save" to generate your API key
+### Step 1: Clone the Repository
 
-### Installation
-
-1. Clone this repository
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Add your NY Times API key to `src/services/api.js`:
-   ```javascript
-   const NY_TIMES_API_KEY = 'your-actual-api-key-here';
-   ```
-
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-
-5. Open your browser to `http://localhost:5173`
-
-## Project Structure
-
-```
-news-reader-starter/
-├── src/
-│   ├── components/
-│   │   ├── ArticleCard.jsx
-│   │   ├── Layout.jsx
-│   │   ├── Login.css
-│   │   ├── Login.jsx
-│   │   └── Navigation.jsx
-│   ├── context/
-│   │   └── ArticlesContext.jsx
-│   ├── pages/
-│   │   ├── HomePage.jsx
-│   │   ├── SearchPage.jsx
-│   │   └── SavedArticlesPage.jsx
-│   ├── services/
-│   │   └── api.js
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── package.json
-└── vite.config.js
+```bash
+git clone https://github.com/your-username/booknook.git
+cd booknook
 ```
 
-## Features (Current)
+### Step 2: Install Dependencies
 
-- Browse NY Times top stories
-- Search for articles by keyword
-- Bookmark articles (shared by all users - this needs to be fixed!)
-- Responsive design
+```bash
+npm install
+```
 
-## Your Assignment
+### Step 3: Environment Variables
 
-You will need to:
-1. Implement user authentication (login/logout)
-2. Create protected routes that require authentication
-3. Make saved articles user-specific
-4. Add role-based access control (regular vs premium users)
-5. Secure the API key using environment variables
-6. Deploy the application to Vercel
+Create a .env in the root directory:
 
-Good luck!
+```bash
+VITE_GOOGLE_BOOKS_KEY=your_google_books_api_key_here
+```
+
+**To get a Google Books API Key:**
+
+1. Go to Google Cloud Console
+2. Create a new project or select existing
+3. Enable "Google Books API"
+4. Go to Credentials → Create Credentials → API Key
+5. Copy the key and paste in .env
+
+### Step 4: Run Development Server
+
+```bash
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+## 🧪 Testing
+
+Run the test suite:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## Deployment with Vercel
+
+1. Push your code to GitHub
+2. Go to vercel.com
+3. Click "New Project"
+4. Import your GitHub repository
+5. Configure project:
+   1. Framework Preset: Vite
+   2. Build Command: npm run build
+   3. Output Directory: dist
+   4. Install Command: npm install
+6. Add Environment Variable:
+   1. Key: VITE_GOOGLE_BOOKS_KEY
+   2. Value: your_google_books_api_key
+7. Click "Deploy"
