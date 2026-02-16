@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const storedUser = getCurrentUser();
     if (storedUser) {
-      // Sanitize stored user data on restore
+      // sanitize stored user data on restore
       const sanitizedUser = {
         ...storedUser,
         username: storedUser.username ? sanitizeInput(storedUser.username) : "",
@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
         createUser({
           username: "testuser",
           email: "test@test.com",
-          password: "password",
+          password: "password123", // updated to meet password criteria
         });
       } catch (e) {
         // user might already exist from previous runs
@@ -98,7 +98,9 @@ export function AuthProvider({ children }) {
     }
 
     if (!validatePassword(sanitizedPassword)) {
-      throw new Error("Invalid password format");
+      throw new Error(
+        "Password must be at least 8 characters with letters and numbers",
+      );
     }
 
     return { sanitizedLogin, sanitizedPassword };
@@ -122,13 +124,15 @@ export function AuthProvider({ children }) {
       const foundUser = findUserByLogin(sanitizedLogin);
 
       if (!foundUser) {
-        setError("User not found");
+        setError(
+          `No account found with "${sanitizedLogin}". Please check your username/email or register.`,
+        );
         throw new Error("User not found");
       }
 
       // simple password comparison
       if (foundUser.password !== sanitizedPassword) {
-        setError("Invalid password");
+        setError("Incorrect password. Please try again.");
         throw new Error("Invalid password");
       }
 
@@ -143,7 +147,15 @@ export function AuthProvider({ children }) {
       setCurrentUser(sanitizedUser);
       return sanitizedUser;
     } catch (error) {
-      setError(error.message);
+      // only set generic error if not already set with specific message
+      if (
+        !error.message.includes("User not found") &&
+        !error.message.includes("Invalid password") &&
+        !error.message.includes("valid email") &&
+        !error.message.includes("fields are required")
+      ) {
+        setError("Login failed. Please try again.");
+      }
       throw error;
     } finally {
       setLoading(false);
@@ -166,17 +178,19 @@ export function AuthProvider({ children }) {
 
     if (!validateUsername(sanitizedUsername)) {
       throw new Error(
-        "Username must be 3-20 characters (letters, numbers, _, -)",
+        "Username must be 3-20 characters and can only contain letters, numbers, underscores (_), and hyphens (-)",
       );
     }
 
     if (!validateEmail(sanitizedEmail)) {
-      throw new Error("Please enter a valid email address");
+      throw new Error(
+        "Please enter a valid email address (e.g., name@example.com)",
+      );
     }
 
     if (!validatePassword(sanitizedPassword)) {
       throw new Error(
-        "Password must be at least 8 characters with letters and numbers",
+        "Password must be at least 8 characters long and contain at least one letter and one number",
       );
     }
 
@@ -194,7 +208,7 @@ export function AuthProvider({ children }) {
     try {
       // handle test calls that only pass username
       const registerEmail = email || `${username}@test.com`;
-      const registerPassword = password || "password";
+      const registerPassword = password || "password123";
 
       // validate and sanitize inputs
       const { sanitizedUsername, sanitizedEmail, sanitizedPassword } =
@@ -210,12 +224,16 @@ export function AuthProvider({ children }) {
       );
 
       if (usernameTaken) {
-        setError("Username already taken");
+        setError(
+          `Username "${sanitizedUsername}" is already taken. Please choose a different username.`,
+        );
         throw new Error("Username already taken");
       }
 
       if (emailTaken) {
-        setError("Email already in use");
+        setError(
+          `Email "${sanitizedEmail}" is already registered. Please use a different email or try logging in.`,
+        );
         throw new Error("Email already in use");
       }
 
@@ -236,7 +254,17 @@ export function AuthProvider({ children }) {
       setCurrentUser(sanitizedUser);
       return sanitizedUser;
     } catch (error) {
-      setError(error.message);
+      // only set generic error if not already set with specific message
+      if (
+        !error.message.includes("already taken") &&
+        !error.message.includes("already registered") &&
+        !error.message.includes("All fields are required") &&
+        !error.message.includes("Username must be") &&
+        !error.message.includes("valid email") &&
+        !error.message.includes("Password must be")
+      ) {
+        setError("Registration failed. Please try again.");
+      }
       throw error;
     } finally {
       setLoading(false);
@@ -249,7 +277,7 @@ export function AuthProvider({ children }) {
     return register(
       sanitizedUsername,
       `${sanitizedUsername}@test.com`,
-      "password",
+      "password123",
     );
   };
 
@@ -281,7 +309,7 @@ export function AuthProvider({ children }) {
       return Promise.resolve();
     } catch (error) {
       console.error("Error in deleteAccount:", error);
-      setError(error.message);
+      setError("Failed to delete account. Please try again.");
       throw error;
     }
   };

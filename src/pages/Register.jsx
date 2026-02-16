@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   validateEmail,
   validateUsername,
+  validatePassword,
   sanitizeInput,
 } from "../utils/security";
 import "../styles/pages.css";

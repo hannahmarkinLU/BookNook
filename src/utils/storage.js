@@ -1,3 +1,5 @@
+// utils/storage.js
+
 // keys
 const USERS_KEY = "users";
 const CURRENT_USER_KEY = "currentUser";
@@ -36,13 +38,20 @@ export const saveUsers = (users) => write(USERS_KEY, users);
 
 export const findUserByLogin = (login) => {
   const users = getUsers();
-  return Object.values(users).find(
+  console.log("All users in storage:", users); // Add this debug log
+  console.log("Looking for login:", login); // Add this debug log
+
+  const foundUser = Object.values(users).find(
     (user) => user.username === login || user.email === login,
   );
+
+  console.log("Found user:", foundUser); // Add this debug log
+  return foundUser;
 };
 
 export const createUser = ({ username, email, password }) => {
   const users = getUsers();
+  console.log("Existing users before create:", users); // Add this debug log
 
   const id = crypto.randomUUID();
 
@@ -54,15 +63,18 @@ export const createUser = ({ username, email, password }) => {
     createdAt: new Date().toISOString(),
   };
 
+  console.log("Users after create:", users);
   saveUsers(users);
   return users[id];
 };
 
 // session
-
 export const getCurrentUser = () => read(CURRENT_USER_KEY, null);
 
-export const setCurrentUser = (user) => write(CURRENT_USER_KEY, user);
+export const setCurrentUser = (user) => {
+  console.log("Setting current user:", user);
+  write(CURRENT_USER_KEY, user);
+};
 
 export const clearCurrentUser = () => localStorage.removeItem(CURRENT_USER_KEY);
 
