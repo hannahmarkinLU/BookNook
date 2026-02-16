@@ -18,7 +18,12 @@ function Navbar() {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <span className="logo">📖</span>
+        <img
+          src="/logo-nav.svg"
+          alt="BookNook"
+          className="nav-logo"
+          style={{ width: 32, height: 32 }}
+        />
         <span className="brand">BookNook</span>
       </div>
 

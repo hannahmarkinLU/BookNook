@@ -52,7 +52,16 @@ function Login() {
   return (
     <div className="auth-page">
       <header className="auth-header">
-        <div className="logo">📖</div>
+        <img
+          src="/logo-auth.svg"
+          alt="BookNook"
+          className="auth-logo"
+          style={{
+            width: 100,
+            height: 100,
+            marginTop: "20px",
+          }}
+        />
         <h1>BookNook</h1>
         <p>Track your reading journey</p>
       </header>
