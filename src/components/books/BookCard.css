@@ -1,5 +1,3 @@
-@import url("./src/index.css");
-
 .book-card {
   background: var(--bg-card);
   border-radius: 12px;
