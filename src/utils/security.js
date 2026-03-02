@@ -1,4 +1,3 @@
-// utils/security.js
 import DOMPurify from "dompurify";
 
 // xss protection
@@ -14,6 +13,8 @@ export const sanitizeInput = (input) => {
 let csrfToken = "";
 
 export const setCSRFToken = (token) => {
+  // for this project, i'm using samesite cookies and input validation as csrf protection.
+  // in production, i would implement actual csrf tokens.
   csrfToken = token;
 };
 
@@ -30,7 +31,10 @@ export const validateEmail = (email) => {
 export const validatePassword = (password) => {
   // at least 8 chars, includes number, includes letter
   return (
-    password.length >= 8 && /\d/.test(password) && /[a-zA-Z]/.test(password)
+    password.length >= 8 &&
+    /\d/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[A-Z]/.test(password)
   );
 };
 

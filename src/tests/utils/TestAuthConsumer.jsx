@@ -9,7 +9,7 @@ function TestAuthConsumer() {
     try {
       setLocalError(null);
       // for test user, use username as login value
-      await login("testuser", "password");
+      await login("testuser", "password123");
     } catch (err) {
       setLocalError(err.message);
     }
@@ -19,7 +19,7 @@ function TestAuthConsumer() {
     try {
       setLocalError(null);
       // use the register function with email
-      await register("newuser", "newuser@test.com", "password");
+      await register("newuser", "newuser@test.com", "Password123");
     } catch (err) {
       setLocalError(err.message);
     }

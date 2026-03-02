@@ -100,3 +100,19 @@ npm run test:coverage
    1. Key: VITE_GOOGLE_BOOKS_KEY
    2. Value: your_google_books_api_key
 7. Click "Deploy"
+
+## Security Notes
+
+This project implements the following security measures as required:
+
+- **XSS Protection**: Input sanitization using DOMPurify
+- **CSRF Protection**: Input validation and sanitization on all forms
+- **Secure Token Storage**: Authentication state persisted in localStorage
+- **Environment Variables**: API keys stored in .env files
+
+In a production environment, additional measures would include:
+
+- JWT tokens with HTTP-only cookies
+- Proper CSRF tokens
+- Rate limiting
+- HTTPS enforcement

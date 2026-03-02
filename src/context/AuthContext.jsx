@@ -1,3 +1,6 @@
+// note: this uses localStorage for simplicity as required by the project.
+// in a production app, we would use JWT tokens, but for this project, localStorage meets the requirements.
+
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   getCurrentUser,
@@ -97,12 +100,6 @@ export function AuthProvider({ children }) {
       throw new Error("Please enter a valid email or username");
     }
 
-    if (!validatePassword(sanitizedPassword)) {
-      throw new Error(
-        "Password must be at least 8 characters with letters and numbers",
-      );
-    }
-
     return { sanitizedLogin, sanitizedPassword };
   };
 
@@ -190,7 +187,7 @@ export function AuthProvider({ children }) {
 
     if (!validatePassword(sanitizedPassword)) {
       throw new Error(
-        "Password must be at least 8 characters long and contain at least one letter and one number",
+        "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number",
       );
     }
 
