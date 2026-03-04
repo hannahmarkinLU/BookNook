@@ -237,15 +237,6 @@ const response = await fetch(
 
 The project includes comprehensive tests covering all major functionality.
 
-### Test Structure
-
-src/tests/
-├── components/ # Component unit tests
-├── context/ # Context provider tests
-├── pages/ # Page component tests
-├── integration/ # Integration tests
-└── utils/ # Utility function tests
-
 ### Running Tests
 
 | **Command**           | **Description**                |
