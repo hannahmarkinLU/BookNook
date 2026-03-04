@@ -5,6 +5,7 @@ import {
   validatePassword,
   validateUsername,
 } from "../utils/security";
+import { generateCSRFToken, validateCSRFToken } from "../utils/csrf";
 
 describe("Security Utilities", () => {
   describe("sanitizeInput", () => {
@@ -47,6 +48,27 @@ describe("Security Utilities", () => {
       expect(validatePassword("nouppercase123")).toBe(false);
       expect(validatePassword("NOLOWERCASE123")).toBe(false);
       expect(validatePassword("NoNumbersHere")).toBe(false);
+    });
+  });
+
+  describe("CSRF Protection", () => {
+    test("generates a valid CSRF token", () => {
+      const token = generateCSRFToken();
+      expect(token).toBeTruthy();
+      expect(typeof token).toBe("string");
+      expect(token.length).toBeGreaterThan(20);
+    });
+
+    test("validates correct CSRF token", () => {
+      const token = generateCSRFToken();
+      sessionStorage.setItem("csrf-token", token);
+      expect(validateCSRFToken(token)).toBe(true);
+    });
+
+    test("rejects invalid CSRF token", () => {
+      const token = generateCSRFToken();
+      sessionStorage.setItem("csrf-token", token);
+      expect(validateCSRFToken("wrong-token")).toBe(false);
     });
   });
 });

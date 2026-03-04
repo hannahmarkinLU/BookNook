@@ -6,12 +6,14 @@ import {
   validateUsername,
   sanitizeInput,
 } from "../utils/security";
+import { getCSRFToken, validateCSRFToken } from "../utils/csrf"; // Add this import
 import "../styles/pages.css";
 
 function Login() {
   const [loginValue, setLoginValue] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [csrfToken] = useState(getCSRFToken()); // Add this
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,6 +24,16 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    // Get CSRF token from form
+    const formData = new FormData(e.target);
+    const submittedToken = formData.get("_csrf");
+
+    // Validate CSRF token
+    if (!validateCSRFToken(submittedToken)) {
+      setError("Security validation failed. Please refresh the page.");
+      return;
+    }
 
     // sanitize inputs
     const sanitizedLogin = sanitizeInput(loginValue);
@@ -67,10 +79,10 @@ function Login() {
       </header>
 
       <form className="auth-card" onSubmit={handleSubmit}>
+        <input type="hidden" name="_csrf" value={csrfToken} />{" "}
+        {/* Add this hidden input */}
         <h2>Login</h2>
-
         {error && <p className="auth-error">{error}</p>}
-
         <label>
           Email or Username
           <input
@@ -80,7 +92,6 @@ function Login() {
             required
           />
         </label>
-
         <label>
           Password
           <input
@@ -90,13 +101,10 @@ function Login() {
             required
           />
         </label>
-
         <button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
-
         <p className="auth-switch">New to BookNook?</p>
-
         <Link to="/register" className="secondary-button">
           Sign up
         </Link>

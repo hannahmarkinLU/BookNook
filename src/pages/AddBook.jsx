@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useBooks } from "../context/BooksContext";
 import Navbar from "../components/navigation/NavBar";
+import { getCSRFToken, validateCSRFToken } from "../utils/csrf";
 import "../styles/pages.css";
 
 export default function AddBook() {
@@ -10,9 +11,23 @@ export default function AddBook() {
   const [query, setQuery] = useState("");
   const [statuses, setStatuses] = useState({});
   const [expanded, setExpanded] = useState({});
+  const [searchError, setSearchError] = useState(""); // for CSRF errors
+  const [csrfToken] = useState(getCSRFToken());
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setSearchError("");
+
+    // get CSRF token from form
+    const formData = new FormData(e.target);
+    const submittedToken = formData.get("_csrf");
+
+    // validate CSRF token
+    if (!validateCSRFToken(submittedToken)) {
+      setSearchError("Security validation failed. Please refresh the page.");
+      return;
+    }
+
     if (query.trim()) searchBooks(query);
   };
 
@@ -30,9 +45,9 @@ export default function AddBook() {
 
       <main className="add-book-page">
         <h1 className="page-title">Add / Search Books</h1>
-
         {/* search */}
         <form className="search-card" onSubmit={handleSearch}>
+          <input type="hidden" name="_csrf" value={csrfToken} />{" "}
           <input
             className="search-input"
             value={query}
@@ -43,10 +58,10 @@ export default function AddBook() {
             Search
           </button>
         </form>
-
+        {searchError && <p className="error-text">{searchError}</p>}{" "}
+        {/* show CSRF errors */}
         {loading && <p className="status-text">Loading…</p>}
         {error && <p className="error-text">{error}</p>}
-
         <div className="search-results">
           {searchResults.map((book) => {
             const info = book.volumeInfo;

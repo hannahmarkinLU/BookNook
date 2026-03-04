@@ -266,4 +266,12 @@ describe("AddBook", () => {
       expect(placeholders.length).toBeGreaterThan(0);
     });
   });
+
+  test("handles empty search query", () => {
+    renderWithProviders();
+    const searchButton = screen.getByRole("button", { name: "Search" });
+    fireEvent.click(searchButton);
+    // should not crash, search function shouldn't be called with empty query
+    expect(mockSearchBooks).not.toHaveBeenCalled();
+  });
 });
