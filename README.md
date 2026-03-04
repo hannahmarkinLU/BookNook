@@ -2,6 +2,43 @@
 
 A modern web application for tracking your reading journey. Save books, track reading progress, write reviews, and manage your personal library.
 
+**Important**: This is a frontend-only demo application. User data is stored temporarily in your browser's localStorage and will be lost if you clear your browser data. No backend server or database is used.
+
+## 🎯 Project Context
+
+This was built as a frontend class project to demonstrate:
+
+- React components and hooks
+- API integration (Google Books)
+- Client-side routing
+- State management with Context API
+- Responsive design
+
+### Known Limitations
+
+- 🔸 No real backend - uses mock authentication
+- 🔸 Data is device/browser specific
+- 🔸 Cannot access your books from another device
+- 🔸 "Multi-user" is simulated - each browser has its own data
+
+## 💾 Data Persistence
+
+This project uses browser localStorage to simulate a database:
+
+- User accounts and book data are stored locally in your browser
+- Data persists between sessions but is device-specific
+- Clearing browser data will delete all your books and reviews
+- No cloud sync or multi-device support
+
+## 🔐 Authentication Note
+
+Authentication is simulated for the frontend project:
+
+- No passwords are actually stored or verified
+- Any email/password combination "works"
+- "Logged in" state is just a flag in localStorage
+- This is intentional to demonstrate auth flows without building a backend
+
 ## ✨ Features
 
 - **🔐 User Authentication** - Secure login and registration
@@ -85,7 +122,7 @@ npm run test:watch
 npm run test:coverage
 ```
 
-## Deployment with Vercel
+## 🌐 Deployment with Vercel
 
 1. Push your code to GitHub
 2. Go to vercel.com
@@ -101,7 +138,7 @@ npm run test:coverage
    2. Value: your_google_books_api_key
 7. Click "Deploy"
 
-## Security Notes
+## 🛡️ Security Notes
 
 This project implements the following security measures as required:
 

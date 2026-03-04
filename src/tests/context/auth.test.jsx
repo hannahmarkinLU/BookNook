@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { AuthProvider } from "../context/AuthContext";
-import { BooksProvider } from "../context/BooksContext";
-import TestAuthConsumer from "./utils/TestAuthConsumer";
+import { AuthProvider } from "../../context/AuthContext";
+import { BooksProvider } from "../../context/BooksContext";
+import TestAuthConsumer from "../utils/TestAuthConsumer";
 
 describe("AuthContext", () => {
   beforeEach(() => {

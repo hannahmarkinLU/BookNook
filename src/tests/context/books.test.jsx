@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { BooksProvider, useBooks } from "../context/BooksContext";
-import { AuthProvider } from "../context/AuthContext";
+import { BooksProvider, useBooks } from "../../context/BooksContext";
+import { AuthProvider } from "../../context/AuthContext";
 
 // test component to access context
 function TestBooksConsumer() {
