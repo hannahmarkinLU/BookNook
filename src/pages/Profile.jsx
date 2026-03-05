@@ -139,7 +139,7 @@ function Profile() {
           </div>
         </section>
 
-        {/* Additional Stats (Optional) */}
+        {/* Additional Stats */}
         <section className="additional-stats">
           <h3>Additional Statistics</h3>
 

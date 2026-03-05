@@ -7,7 +7,7 @@ import {
   validatePassword,
   sanitizeInput,
 } from "../utils/security";
-import { getCSRFToken, validateCSRFToken } from "../utils/csrf"; // Add this import
+import { getCSRFToken, validateCSRFToken } from "../utils/csrf";
 import "../styles/pages.css";
 
 function Register() {
@@ -19,17 +19,17 @@ function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [csrfToken] = useState(getCSRFToken()); // Add this
+  const [csrfToken] = useState(getCSRFToken());
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Get CSRF token from form
+    // get CSRF token from form
     const formData = new FormData(e.target);
     const submittedToken = formData.get("_csrf");
 
-    // Validate CSRF token
+    // validate CSRF token
     if (!validateCSRFToken(submittedToken)) {
       setError("Security validation failed. Please refresh the page.");
       return;
@@ -54,7 +54,7 @@ function Register() {
 
     if (!validatePassword(sanitizedPassword)) {
       setError(
-        "Password must be at least 8 characters with letters and numbers",
+        "Password must be at least 8 characters with uppercase and lowercase letters and numbers",
       );
       return;
     }
@@ -90,9 +90,7 @@ function Register() {
       </header>
 
       <form className="auth-card" onSubmit={handleSubmit}>
-        <input type="hidden" name="_csrf" value={csrfToken} />{" "}
-        {/* Add this hidden input */}
-        <h2>Sign up</h2>
+        <input type="hidden" name="_csrf" value={csrfToken} /> <h2>Sign up</h2>
         {error && <p className="auth-error">{error}</p>}
         <label>
           Username

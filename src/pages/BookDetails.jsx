@@ -1,4 +1,3 @@
-// pages/BookDetails.jsx - Fixed version without optional chaining
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useBooks } from "../context/BooksContext";
@@ -227,7 +226,7 @@ function BookDetails() {
     ? book.description.slice(0, maxDescriptionLength) + "…"
     : "";
 
-  // Format authors display - safe access
+  // Format authors display
   const formattedAuthors =
     book.authors && Array.isArray(book.authors)
       ? book.authors.join(", ")
